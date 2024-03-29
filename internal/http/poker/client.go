@@ -14,6 +14,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+
+	"fmt"
 )
 
 const (
@@ -40,6 +42,12 @@ var leaderOnlyOperations = map[string]struct{}{
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		origin := r.Header.Get("Origin")
+		fmt.Printf("ORIGIN1=%s Host=%s\n", origin, r.Host)
+		return true
+		//return origin == "http://128.0.0.1:8080"
+	},
 }
 
 // connection is a middleman between the websocket connection and the hub.
