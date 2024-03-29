@@ -209,8 +209,10 @@ func checkOrigin(r *http.Request, appDomain string) bool {
 	return equalASCIIFold(appDomain, r.Host) || equalASCIIFold(u.Host, r.Host)
 }
 
+// equalASCIIFold returns true if s is equal to t with ASCII case folding as
+// defined in RFC 4790.
 // Taken from Gorilla Websocket, https://github.com/gorilla/websocket/blob/main/util.go
-// TODO: necessary?
+// TODO: necessary? if so, move to http/util.go?
 func equalASCIIFold(s, t string) bool {
 	for s != "" && t != "" {
 		sr, size := utf8.DecodeRuneInString(s)
