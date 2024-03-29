@@ -19,6 +19,9 @@ type Config struct {
 
 	// Send pings to peer with this period. Must be less than pongWait.
 	PingPeriodSec int
+
+	// App Domain (for Websocket Origin Check)
+	AppDomain string
 }
 
 func (c *Config) WriteWait() time.Duration {
