@@ -14,8 +14,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
-
-	"fmt"
 )
 
 const (
@@ -39,7 +37,7 @@ var leaderOnlyOperations = map[string]struct{}{
 	"concede_battle": {},
 }
 
-var upgrader = websocket.Upgrader{
+/* var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
@@ -48,6 +46,19 @@ var upgrader = websocket.Upgrader{
 		return true
 		//return origin == "http://128.0.0.1:8080"
 	},
+} */
+
+func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
+	return websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			origin := r.Header.Get("Origin")
+			b.logger.Info("ORIGIN3=" + origin + " Host=" + r.Host + " ConfigAppDomain=" + b.config.PingPeriod().String())
+			return true
+			//return origin == "http://128.0.0.1:8080"
+		},
+	}
 }
 
 // connection is a middleman between the websocket connection and the hub.
@@ -205,6 +216,7 @@ func (b *Service) ServeBattleWs() http.HandlerFunc {
 		var UserAuthed bool
 
 		// upgrade to WebSocket connection
+		var upgrader = b.createWebsocketUpgrader()
 		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			b.logger.Ctx(ctx).Error("websocket upgrade error", zap.Error(err),
