@@ -54,7 +54,7 @@ func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
 			origin := r.Header.Get("Origin")
-			b.logger.Info("ORIGIN3=" + origin + " Host=" + r.Host + " ConfigAppDomain=" + b.config.PingPeriod().String())
+			b.logger.Info("ORIGIN4=" + origin + " Host=" + r.Host + " Config.AppDomain=" + b.config.AppDomain)
 			return true
 			//return origin == "http://128.0.0.1:8080"
 		},
