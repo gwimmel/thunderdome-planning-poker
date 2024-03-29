@@ -5,8 +5,11 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"net/url"
 	"time"
+	"unicode/utf8"
 
 	"github.com/StevenWeathers/thunderdome-planning-poker/thunderdome"
 
@@ -47,19 +50,6 @@ var leaderOnlyOperations = map[string]struct{}{
 		//return origin == "http://128.0.0.1:8080"
 	},
 } */
-
-func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
-	return websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool {
-			origin := r.Header.Get("Origin")
-			b.logger.Info("ORIGIN4=" + origin + " Host=" + r.Host + " Config.AppDomain=" + b.config.AppDomain)
-			return true
-			//return origin == "http://128.0.0.1:8080"
-		},
-	}
-}
 
 // connection is a middleman between the websocket connection and the hub.
 type connection struct {
@@ -193,6 +183,56 @@ func (sub *subscription) writePump() {
 			}
 		}
 	}
+}
+
+func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
+	return websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return checkOrigin(r, b.config.AppDomain)
+		},
+	}
+}
+
+func checkOrigin(r *http.Request, appDomain string) bool {
+	origin := r.Header.Get("Origin")
+	fmt.Print("ORIGIN6=" + origin + " Host=" + r.Host + " Config.AppDomain=" + appDomain + "\n")
+	return true
+}
+
+func checkSameOrigin(r *http.Request) bool {
+	origin := r.Header["Origin"]
+	if len(origin) == 0 {
+		return true
+	}
+	u, err := url.Parse(origin[0])
+	if err != nil {
+		return false
+	}
+	return equalASCIIFold(u.Host, r.Host)
+}
+
+func equalASCIIFold(s, t string) bool {
+	for s != "" && t != "" {
+		sr, size := utf8.DecodeRuneInString(s)
+		s = s[size:]
+		tr, size := utf8.DecodeRuneInString(t)
+		t = t[size:]
+		if sr == tr {
+			continue
+		}
+		if 'A' <= sr && sr <= 'Z' {
+			sr = sr + 'a' - 'A'
+		}
+		if 'A' <= tr && tr <= 'Z' {
+			tr = tr + 'a' - 'A'
+		}
+		if sr != tr {
+			return false
+		}
+	}
+	return s == t
 }
 
 // handleSocketUnauthorized sets the format close message and closes the websocket
