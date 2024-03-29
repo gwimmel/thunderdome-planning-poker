@@ -197,22 +197,20 @@ func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
 
 func checkOrigin(r *http.Request, appDomain string) bool {
 	origin := r.Header.Get("Origin")
-	fmt.Print("ORIGIN6=" + origin + " Host=" + r.Host + " Config.AppDomain=" + appDomain + "\n")
-	return true
-}
-
-func checkSameOrigin(r *http.Request) bool {
-	origin := r.Header["Origin"]
+	fmt.Print("ORIGIN8=" + origin + " Host=" + r.Host + " Config.AppDomain=" + appDomain + "\n")
 	if len(origin) == 0 {
 		return true
 	}
-	u, err := url.Parse(origin[0])
+	u, err := url.Parse(origin)
 	if err != nil {
 		return false
 	}
-	return equalASCIIFold(u.Host, r.Host)
+	fmt.Print("- u.HOST=" + u.Host + "\n")
+	return equalASCIIFold(appDomain, r.Host) || equalASCIIFold(u.Host, r.Host)
 }
 
+// Taken from Gorilla Websocket, https://github.com/gorilla/websocket/blob/main/util.go
+// TODO: necessary?
 func equalASCIIFold(s, t string) bool {
 	for s != "" && t != "" {
 		sr, size := utf8.DecodeRuneInString(s)
