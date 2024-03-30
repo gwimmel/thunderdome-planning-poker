@@ -202,12 +202,12 @@ func checkOrigin(r *http.Request, appDomain string) bool {
 	if len(origin) == 0 {
 		return true
 	}
-	u, err := url.Parse(origin)
+	originUrl, err := url.Parse(origin)
 	if err != nil {
 		return false
 	}
-	fmt.Print("- u.HOST=" + u.Host + "\n")
-	return equalASCIIFold(appDomain, r.Host) || equalASCIIFold(u.Host, r.Host)
+	fmt.Print("- originUrl.HOST=" + originUrl.Host + "\n")
+	return equalASCIIFold(originUrl.Host, appDomain) || equalASCIIFold(originUrl.Host, r.Host)
 }
 
 // equalASCIIFold returns true if s is equal to t with ASCII case folding as
