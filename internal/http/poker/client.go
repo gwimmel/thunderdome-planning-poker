@@ -195,6 +195,7 @@ func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
 	}
 }
 
+// TODO: move to http/util.go?
 func checkOrigin(r *http.Request, appDomain string) bool {
 	origin := r.Header.Get("Origin")
 	fmt.Print("ORIGIN8=" + origin + " Host=" + r.Host + " Config.AppDomain=" + appDomain + "\n")
