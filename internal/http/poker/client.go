@@ -195,7 +195,7 @@ func (b *Service) createWebsocketUpgrader() websocket.Upgrader {
 	}
 }
 
-// TODO: move to http/util.go?
+// TODO: move to a place where it could be shared?
 func checkOrigin(r *http.Request, appDomain string) bool {
 	origin := r.Header.Get("Origin")
 	fmt.Print("ORIGIN8=" + origin + " Host=" + r.Host + " Config.AppDomain=" + appDomain + "\n")
@@ -213,7 +213,7 @@ func checkOrigin(r *http.Request, appDomain string) bool {
 // equalASCIIFold returns true if s is equal to t with ASCII case folding as
 // defined in RFC 4790.
 // Taken from Gorilla Websocket, https://github.com/gorilla/websocket/blob/main/util.go
-// TODO: necessary? if so, move to http/util.go?
+// TODO: necessary? if so, move to a place where it could be shared?
 func equalASCIIFold(s, t string) bool {
 	for s != "" && t != "" {
 		sr, size := utf8.DecodeRuneInString(s)
