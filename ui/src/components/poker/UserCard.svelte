@@ -144,8 +144,8 @@
             </button>
           {/if}
         </p>
-        {#if warrior.id == $sessionUser.id}
-          {#if leaders.includes(warrior.id) && !isLeader}
+        {#if warrior.id === $sessionUser.id}
+          {#if !isLeader}
             <button
               on:click="{toggleBecomeLeader}"
               class="inline-block align-baseline text-sm
