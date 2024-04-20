@@ -106,20 +106,20 @@
         </p>
         <p class="text-l text-gray-700 leading-tight">
           {#if leaders.includes(warrior.id)}
-              <LeaderIcon />
-              {#if isLeader}
-                &nbsp;
-                <button
-                  on:click="{demoteLeader}"
-                  class="inline text-sm text-red-500
-                                  hover:text-red-800 bg-transparent
-                                  border-transparent"
-                  data-testid="user-demote"
-                >
-                  {$LL.demote()}
-                </button>
-              {:else}&nbsp;{$LL.leader()}
-              {/if}
+            <LeaderIcon />
+            {#if isLeader}
+              &nbsp;
+              <button
+                on:click="{demoteLeader}"
+                class="inline text-sm text-red-500
+                                hover:text-red-800 bg-transparent
+                                border-transparent"
+                data-testid="user-demote"
+              >
+                {$LL.demote()}
+              </button>
+            {:else}&nbsp;{$LL.leader()}
+            {/if}
           {:else if isLeader}
             <button
               on:click="{promoteLeader}"
