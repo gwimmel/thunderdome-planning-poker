@@ -131,19 +131,20 @@
           >
             {$LL.promote()}
           </button>
-          {#if !warrior.spectator}
-            &nbsp;|&nbsp;
-            <button
-              on:click="{jabWarrior}"
-              class="inline-block align-baseline text-sm
-                            text-blue-500 hover:text-blue-800 bg-transparent
-                            border-transparent"
-              data-testid="user-nudge"
-            >
-              {$LL.warriorNudge()}
-            </button>
-          {/if}
-        {:else if warrior.id === $sessionUser.id}
+        {/if}
+        {#if isLeader && warrior.id !== $sessionUser.id && !warrior.spectator}
+          &nbsp;|&nbsp;
+          <button
+            on:click="{jabWarrior}"
+            class="inline-block align-baseline text-sm
+                          text-blue-500 hover:text-blue-800 bg-transparent
+                          border-transparent"
+            data-testid="user-nudge"
+          >
+            {$LL.warriorNudge()}
+          </button>
+        {/if}
+        {#if leaders.includes(warrior.id) && !isLeader && warrior.id === $sessionUser.id}
           <button
             on:click="{toggleBecomeLeader}"
             class="inline-block align-baseline text-sm
