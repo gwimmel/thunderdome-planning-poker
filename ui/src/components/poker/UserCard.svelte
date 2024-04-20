@@ -104,8 +104,8 @@
             <span data-testid="user-name">{warrior.name}</span>
           {/if}
         </p>
+        <p class="text-l text-gray-700 leading-tight">
         {#if leaders.includes(warrior.id)}
-          <p class="text-l text-gray-700 leading-tight">
             <LeaderIcon />
             {#if isLeader}
               &nbsp;
@@ -120,7 +120,6 @@
               </button>
             {:else}&nbsp;{$LL.leader()}
             {/if}
-          </p>
         {:else if isLeader}
           <button
             on:click="{promoteLeader}"
@@ -144,6 +143,7 @@
             {$LL.warriorNudge()}
           </button>
         {/if}
+        </p>
         {#if leaders.includes(warrior.id) && !isLeader && warrior.id === $sessionUser.id}
           <button
             on:click="{toggleBecomeLeader}"
