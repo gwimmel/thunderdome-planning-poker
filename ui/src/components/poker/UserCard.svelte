@@ -105,67 +105,69 @@
           {/if}
         </p>
         <p class="text-l text-gray-700 leading-tight">
-        {#if leaders.includes(warrior.id)}
-            <LeaderIcon />
-            {#if isLeader}
-              &nbsp;
-              <button
-                on:click="{demoteLeader}"
-                class="inline text-sm text-red-500
-                                hover:text-red-800 bg-transparent
-                                border-transparent"
-                data-testid="user-demote"
-              >
-                {$LL.demote()}
-              </button>
-            {:else}&nbsp;{$LL.leader()}
-            {/if}
-        {:else if isLeader}
-          <button
-            on:click="{promoteLeader}"
-            class="inline-block align-baseline text-sm
-                        text-green-500 hover:text-green-800 bg-transparent
-                        border-transparent"
-            data-testid="user-promote"
-          >
-            {$LL.promote()}
-          </button>
-        {/if}
-        {#if isLeader && warrior.id !== $sessionUser.id && !warrior.spectator}
-          &nbsp;|&nbsp;
-          <button
-            on:click="{jabWarrior}"
-            class="inline-block align-baseline text-sm
+          {#if leaders.includes(warrior.id)}
+              <LeaderIcon />
+              {#if isLeader}
+                &nbsp;
+                <button
+                  on:click="{demoteLeader}"
+                  class="inline text-sm text-red-500
+                                  hover:text-red-800 bg-transparent
+                                  border-transparent"
+                  data-testid="user-demote"
+                >
+                  {$LL.demote()}
+                </button>
+              {:else}&nbsp;{$LL.leader()}
+              {/if}
+          {:else if isLeader}
+            <button
+              on:click="{promoteLeader}"
+              class="inline-block align-baseline text-sm
+                          text-green-500 hover:text-green-800 bg-transparent
+                          border-transparent"
+              data-testid="user-promote"
+            >
+              {$LL.promote()}
+            </button>
+          {/if}
+          {#if isLeader && warrior.id !== $sessionUser.id && !warrior.spectator}
+            &nbsp;|&nbsp;
+            <button
+              on:click="{jabWarrior}"
+              class="inline-block align-baseline text-sm
+                            text-blue-500 hover:text-blue-800 bg-transparent
+                            border-transparent"
+              data-testid="user-nudge"
+            >
+              {$LL.warriorNudge()}
+            </button>
+          {/if}
+        </p>
+        {#if warrior.id == $sessionUser.id}
+          {#if leaders.includes(warrior.id) && !isLeader}
+            <button
+              on:click="{toggleBecomeLeader}"
+              class="inline-block align-baseline text-sm
                           text-blue-500 hover:text-blue-800 bg-transparent
                           border-transparent"
-            data-testid="user-nudge"
-          >
-            {$LL.warriorNudge()}
-          </button>
-        {/if}
-        </p>
-        {#if leaders.includes(warrior.id) && !isLeader && warrior.id === $sessionUser.id}
-          <button
-            on:click="{toggleBecomeLeader}"
-            class="inline-block align-baseline text-sm
-                        text-blue-500 hover:text-blue-800 bg-transparent
-                        border-transparent"
-            data-testid="user-becomeleader"
-          >
-            {$LL.becomeLeader()}
-          </button>
-        {/if}
-        {#if autoFinishVoting && warrior.id === $sessionUser.id}
-          <button
-            on:click="{toggleSpectator}"
-            class="inline-block align-baseline text-sm text-blue-500
-                        hover:text-blue-800 bg-transparent border-transparent"
-            data-testid="user-togglespectator"
-          >
-            {#if !warrior.spectator}
-              {$LL.becomeSpectator()}
-            {:else}{$LL.becomeParticipant()}{/if}
-          </button>
+              data-testid="user-becomeleader"
+            >
+              {$LL.becomeLeader()}
+            </button>
+          {/if}
+          {#if autoFinishVoting}
+            <button
+              on:click="{toggleSpectator}"
+              class="inline-block align-baseline text-sm text-blue-500
+                          hover:text-blue-800 bg-transparent border-transparent"
+              data-testid="user-togglespectator"
+            >
+              {#if !warrior.spectator}
+                {$LL.becomeSpectator()}
+              {:else}{$LL.becomeParticipant()}{/if}
+            </button>
+          {/if}
         {/if}
       </div>
       <div class="w-1/4 text-right">
